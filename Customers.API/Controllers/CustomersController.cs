@@ -67,6 +67,10 @@ public class CustomersController : ControllerBase
     public async Task<IActionResult> MakePurshace(Guid id, Purshace purshace)
     {
         double cost = await _customerService.MakePurshace(id, purshace);
-        return Ok(cost);
+
+        if (cost != 0)
+            return Ok(cost);
+        else
+            return NotFound();
     }
 }
