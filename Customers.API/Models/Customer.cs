@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Customers.API.Models
 {
@@ -7,5 +8,8 @@ namespace Customers.API.Models
         public Guid Id { get; set; }
         [Required]
         public string Name { get; set; }
+        [JsonIgnore]
+        public List<Purshace>? Purshaces { get; set; }
+
     }
 }

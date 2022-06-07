@@ -15,13 +15,15 @@ public class CustomersController : ControllerBase
         _customerService = customerService;
     }
 
-    [HttpPost(Name = "createCustomer")]
-    public async Task<IActionResult> CreateCustomer(Customer customer)
+    [HttpPost]
+    [Route("createCustomer")]
+    public IActionResult CreateCustomer(Customer customer)
     {
         _customerService.CreateCustomer(customer);
         return Ok();
     }
-    [HttpGet(Name = "getCustomer")]
+    [HttpGet]
+    [Route("getCustomer")]
     public async Task<IActionResult> GetCustomer()
     {
         var customers = await _customerService.GetCustomers();
@@ -31,8 +33,9 @@ public class CustomersController : ControllerBase
 
         return NotFound();
     }
-    [HttpPut(Name = "updateCustomer")]
-    public async Task<IActionResult> UpdateCustomer(Customer customer)
+    [HttpPut]
+    [Route("updateCustomer")]
+    public IActionResult UpdateCustomer(Customer customer)
     {
         var updatedCustomer = _customerService.UpdateCustomer(customer);
 
@@ -41,10 +44,18 @@ public class CustomersController : ControllerBase
 
         return NotFound();
     }
-    [HttpDelete(Name = "deleteCustomer")]
-    public async Task<IActionResult> DeleteCustomer(Guid id)
+    [HttpDelete]
+    [Route("deleteCustomer")]
+    public IActionResult DeleteCustomer(Guid id)
     {
         _customerService.DeleteCustomerById(id);
         return Ok();
+    }
+    [HttpPost]
+    [Route("makePurshace")]
+    public IActionResult MakePurshace(Guid id, Purshace purshace)
+    {
+        double cost = _customerService.MakePurshace(id, purshace);
+        return Ok(cost);
     }
 }

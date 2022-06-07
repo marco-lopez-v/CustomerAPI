@@ -20,21 +20,40 @@ namespace Customers.API.Services
             return Task.Run(() => _customers);
         }
 
-        public Customer UpdateCustomer(Customer customer)
+        public Customer UpdateCustomer(Customer updatedCustomer)
         {
-            if (customer is not null)
+            if (updatedCustomer is not null)
             {
-                Customer oldCustomer = _customers.FirstOrDefault(x => x.Id == customer.Id);
-                oldCustomer = customer;
-                return customer;
+                Customer customer = _customers.FirstOrDefault(x => x.Id == updatedCustomer.Id);
+                customer = updatedCustomer;
+                return updatedCustomer;
             }
             else
                 return null;
         }
-        public void DeleteCustomerById(Guid id)
+        public void DeleteCustomerById(Guid customerId)
         {
-            Customer customer = _customers.FirstOrDefault(x => x.Id == id);
-            _customers.Remove(customer);
+            Customer customer = _customers.FirstOrDefault(x => x.Id == customerId);
+            if (customer is not null)
+                _customers.Remove(customer);
+        }
+        public double MakePurshace(Guid customerId, Purshace purshace)
+        {
+            Customer customer = _customers.FirstOrDefault(x => x.Id == customerId);
+
+            if (customer is not null)
+            {
+                if (customer.Purshaces is null)
+                    customer.Purshaces = new List<Purshace>();
+
+                customer.Purshaces.Add(purshace);
+
+                double cost = Helpers.Helper.ReturnDiscountCost(customer, purshace);
+
+                return cost;
+
+            } else
+                return 0;
         }
     }
 }
