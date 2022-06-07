@@ -12,5 +12,10 @@ namespace Customers.API.Models
 
         [JsonIgnore]
         public List<Purshace>? Purshaces { get; set; }
+
+        public Customer()
+        {
+            this.Id = Guid.NewGuid();
+        }
     }
 }

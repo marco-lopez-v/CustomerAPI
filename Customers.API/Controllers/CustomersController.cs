@@ -17,17 +17,20 @@ public class CustomersController : ControllerBase
 
     [HttpPost]
     [Route("createCustomer")]
-    public IActionResult CreateCustomer(Customer customer)
+    public async Task<IActionResult> CreateCustomer(Customer customer)
     {
-        _customerService.CreateCustomer(customer);
-        return Ok();
+        Customer createdCustomer = await _customerService.CreateCustomer(customer);
+        if (createdCustomer != null)
+            return Ok(createdCustomer);
+        else
+            return NotFound();
     }
 
     [HttpGet]
     [Route("getCustomer")]
     public async Task<IActionResult> GetCustomer()
     {
-        var customers = await _customerService.GetCustomers();
+        List<Customer> customers = await _customerService.GetCustomers();
 
         if (customers.Any())
             return Ok(customers);
@@ -37,9 +40,9 @@ public class CustomersController : ControllerBase
 
     [HttpPut]
     [Route("updateCustomer")]
-    public IActionResult UpdateCustomer(Customer customer)
+    public async Task<IActionResult> UpdateCustomer(Customer customer)
     {
-        var updatedCustomer = _customerService.UpdateCustomer(customer);
+        Customer updatedCustomer = await _customerService.UpdateCustomer(customer);
 
         if (updatedCustomer is not null)
             return Ok(updatedCustomer);
@@ -49,17 +52,21 @@ public class CustomersController : ControllerBase
 
     [HttpDelete]
     [Route("deleteCustomer")]
-    public IActionResult DeleteCustomer(Guid id)
+    public async Task<IActionResult> DeleteCustomer(Guid id)
     {
-        _customerService.DeleteCustomerById(id);
-        return Ok();
+        Customer deletedCustomer = await _customerService.DeleteCustomerById(id);
+
+        if (deletedCustomer != null)
+            return Ok(deletedCustomer);
+        else
+            return NotFound();
     }
 
     [HttpPost]
     [Route("makePurshace")]
-    public IActionResult MakePurshace(Guid id, Purshace purshace)
+    public async Task<IActionResult> MakePurshace(Guid id, Purshace purshace)
     {
-        double cost = _customerService.MakePurshace(id, purshace);
+        double cost = await _customerService.MakePurshace(id, purshace);
         return Ok(cost);
     }
 }

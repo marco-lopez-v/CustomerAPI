@@ -11,10 +11,22 @@ namespace Customers.API.Services
             _customers = customers;
         }
 
-        public void CreateCustomer(Customer customer)
+        public Task<Customer> CreateCustomer(Customer customer)
         {
-            if (customer is not null)
-                _customers.Add(customer);
+            if (customer != null)
+            {
+                Customer existingCustomer = _customers.FirstOrDefault(x => x.Id == customer.Id);
+
+                if (existingCustomer is null)
+                {
+                    _customers.Add(customer);
+                    return Task.Run(() => customer);
+                }
+                else
+                    return Task.FromResult<Customer>(null);
+            }
+            else
+                return Task.FromResult<Customer>(null);
         }
 
         public Task<List<Customer>> GetCustomers()
@@ -22,30 +34,36 @@ namespace Customers.API.Services
             return Task.Run(() => _customers);
         }
 
-        public Customer UpdateCustomer(Customer updatedCustomer)
+        public Task<Customer> UpdateCustomer(Customer updatedCustomer)
         {
-            if (updatedCustomer is not null)
+            if (updatedCustomer != null)
             {
                 Customer customer = _customers.FirstOrDefault(x => x.Id == updatedCustomer.Id);
                 customer = updatedCustomer;
-                return updatedCustomer;
+                return Task.Run(() => updatedCustomer);
             }
             else
-                return null;
+                return Task.FromResult<Customer>(null);
         }
 
-        public void DeleteCustomerById(Guid customerId)
+        public Task<Customer> DeleteCustomerById(Guid customerId)
         {
-            Customer customer = _customers.FirstOrDefault(x => x.Id == customerId);
-            if (customer is not null)
+            if (customerId != Guid.Empty)
+            {
+                Customer customer = _customers.FirstOrDefault(x => x.Id == customerId);
+
                 _customers.Remove(customer);
+                return Task.Run(() => customer);
+            }
+            else
+                return Task.FromResult<Customer>(null);
         }
 
-        public double MakePurshace(Guid customerId, Purshace purshace)
+        public Task<double> MakePurshace(Guid customerId, Purshace purshace)
         {
             Customer customer = _customers.FirstOrDefault(x => x.Id == customerId);
 
-            if (customer is not null)
+            if (customer != null && purshace != null && purshace.Amount > 0)
             {
                 if (customer.Purshaces is null)
                     customer.Purshaces = new List<Purshace>();
@@ -54,10 +72,10 @@ namespace Customers.API.Services
 
                 double cost = Helpers.Helper.ReturnDiscountCost(customer, purshace);
 
-                return cost;
+                return Task.Run(() => cost);
             }
             else
-                return 0;
+                return Task.FromResult<double>(0);
         }
     }
 }
