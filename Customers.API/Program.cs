@@ -3,7 +3,6 @@ using Customers.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 ConfigureServices(builder.Services);
 
 // Add services to the container.
@@ -34,5 +33,4 @@ void ConfigureServices(IServiceCollection services)
 {
     services.AddSingleton<ICustomerService, CustomerService>();
     services.AddSingleton<List<Customer>>();
-
 }

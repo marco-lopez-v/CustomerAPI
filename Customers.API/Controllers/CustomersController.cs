@@ -22,6 +22,7 @@ public class CustomersController : ControllerBase
         _customerService.CreateCustomer(customer);
         return Ok();
     }
+
     [HttpGet]
     [Route("getCustomer")]
     public async Task<IActionResult> GetCustomer()
@@ -33,6 +34,7 @@ public class CustomersController : ControllerBase
 
         return NotFound();
     }
+
     [HttpPut]
     [Route("updateCustomer")]
     public IActionResult UpdateCustomer(Customer customer)
@@ -44,6 +46,7 @@ public class CustomersController : ControllerBase
 
         return NotFound();
     }
+
     [HttpDelete]
     [Route("deleteCustomer")]
     public IActionResult DeleteCustomer(Guid id)
@@ -51,6 +54,7 @@ public class CustomersController : ControllerBase
         _customerService.DeleteCustomerById(id);
         return Ok();
     }
+
     [HttpPost]
     [Route("makePurshace")]
     public IActionResult MakePurshace(Guid id, Purshace purshace)

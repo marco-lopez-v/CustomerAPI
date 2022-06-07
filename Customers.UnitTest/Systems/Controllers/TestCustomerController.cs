@@ -7,6 +7,5 @@ public class TestCustomerController
     [Fact]
     public void Get()
     {
-
     }
 }
